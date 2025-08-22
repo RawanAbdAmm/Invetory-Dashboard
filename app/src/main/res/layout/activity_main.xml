@@ -13,12 +13,19 @@
         android:id="@+id/etSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="ابحث عن مادة"
+        android:hint="ابحث عن اسم مادة"
         android:drawableStart="@android:drawable/ic_menu_search"
         android:padding="12dp"
         android:background="@android:drawable/editbox_background"
         android:inputType="text"
         android:imeOptions="actionSearch"
+        android:layout_marginBottom="8dp" />
+
+    <Spinner
+        android:id="@+id/spCategory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:prompt="@string/app_name"
         android:layout_marginBottom="8dp" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

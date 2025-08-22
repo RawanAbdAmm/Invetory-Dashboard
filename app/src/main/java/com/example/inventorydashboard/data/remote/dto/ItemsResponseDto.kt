@@ -13,4 +13,5 @@ data class ItemDto(
     @SerializedName("NAME")       val name: String?,
     @SerializedName("CATEOGRYID") val categoryId: String?,
     @SerializedName("BARCODE")    val barcode: String?,
+    @SerializedName("ItemK")    val itemK: String?,
 )

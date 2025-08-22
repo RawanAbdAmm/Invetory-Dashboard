@@ -14,7 +14,8 @@ fun ItemDto.toInventoryItem(): InventoryItem? {
         itemNo = itemNo,
         name = itemName,
         category = categoryId?.ifBlank { null },
-        barcode = barcode?.ifBlank { null }
+        barcode = barcode?.ifBlank { null },
+        itemK = itemK?.ifBlank { null }
     )
 }
 

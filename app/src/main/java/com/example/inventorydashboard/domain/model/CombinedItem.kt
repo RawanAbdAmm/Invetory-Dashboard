@@ -4,5 +4,6 @@ data class CombinedItem(
     val itemNo: String,
     val name: String,
     val category: String?,
-    val quantity: Double
+    val quantity: Double,
+    val itemK: String?
 )

@@ -25,6 +25,13 @@ class InventoryViewModel @Inject constructor(
     private val _items = MutableStateFlow<Result<List<CombinedItem>>>(Result.Loading)
     val items: StateFlow<Result<List<CombinedItem>>> = _items.asStateFlow()
 
+    private var allItems: List<CombinedItem> = emptyList()
+
+    private val _categoryOptions = MutableStateFlow<List<String>>(emptyList())
+    val categoryOptions: StateFlow<List<String>> = _categoryOptions.asStateFlow()
+
+    private var currentSearch: String = ""
+    private var currentCategory: String = ""
 
     init {
         refresh()
@@ -34,27 +41,65 @@ class InventoryViewModel @Inject constructor(
         viewModelScope.launch {
             _items.value = Result.Loading
             try {
-                val itemsResult = async { getItemsUseCase(cono, strno) }
-                val balancesResult = async { getBalancesUseCase(cono, strno) }
+                val itemsDef = async { getItemsUseCase(cono, strno) }
+                val balancesDef = async { getBalancesUseCase(cono, strno) }
 
-                val items = itemsResult.await()
-                val balances = balancesResult.await()
+                val items = itemsDef.await()
+                val balances = balancesDef.await()
 
-                val combined = combine(items, balances)
-                _items.value = Result.Success(combined)
+                allItems = combine(items, balances).sortedBy { it.name }
 
+                val category = allItems.mapNotNull { it.itemK?.trim() }
+                    .filter { it.isNotEmpty() }
+                    .distinct()
+                    .sorted()
+
+                _categoryOptions.value = listOf("الكل") + category
+                currentSearch = ""
+                currentCategory = ""
+
+                applyFilters()
             } catch (e: Exception) {
                 _items.value = Result.Error(e.message ?: "Unexpected error")
             }
         }
     }
 
+    fun setCategory(categoryOrAll: String) {
+        currentCategory = if (categoryOrAll == "الكل") "" else categoryOrAll
+        applyFilters()
+    }
+
+    private fun applyFilters() {
+        _items.value = Result.Success(
+            allItems.filter { item ->
+                (currentSearch.isEmpty() || item.name.trim().lowercase()
+                    .startsWith(currentSearch)) &&
+                        (currentCategory.isEmpty() || item.itemK?.trim() == currentCategory)
+            }
+        )
+    }
+
+
+    fun search(text: String) {
+        val value = text.trim().lowercase()
+        if (value.isEmpty()) {
+            _items.value = Result.Success(allItems)
+        } else {
+            val filtered = allItems.filter { it.matches(value) }
+            _items.value = Result.Success(filtered)
+        }
+    }
+
+    private fun CombinedItem.matches(text: String): Boolean =
+        name.contains(text, ignoreCase = true)
+
 
     private fun combine(
         items: List<InventoryItem>,
         balances: List<BalanceItem>
     ): List<CombinedItem> {
-        val qtyByItem: Map<String, Double> = balances
+        val qtyByItem = balances
             .groupBy { it.itemCode }
             .mapValues { (_, list) -> list.sumOf { it.quantity } }
 
@@ -63,8 +108,9 @@ class InventoryViewModel @Inject constructor(
                 itemNo = item.itemNo,
                 name = item.name,
                 category = item.category,
-                quantity = qtyByItem[item.itemNo] ?: 0.0
+                quantity = qtyByItem[item.itemNo] ?: 0.0,
+                itemK = item.itemK,
             )
-        }.sortedBy { it.name }
+        }
     }
 }

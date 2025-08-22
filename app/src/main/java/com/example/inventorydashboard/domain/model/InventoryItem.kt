@@ -5,5 +5,6 @@ data class InventoryItem(
     val itemNo: String,
     val name: String,
     val category: String?,
-    val barcode: String?
+    val barcode: String?,
+    val itemK: String?
 )
