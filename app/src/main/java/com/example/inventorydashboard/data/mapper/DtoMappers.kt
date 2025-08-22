@@ -1,8 +1,10 @@
 package com.example.inventorydashboard.data.mapper
 
+import com.example.inventorydashboard.data.local.dto.CombinedItemDto
 import com.example.inventorydashboard.data.remote.dto.BalanceDto
 import com.example.inventorydashboard.data.remote.dto.ItemDto
 import com.example.inventorydashboard.domain.model.BalanceItem
+import com.example.inventorydashboard.domain.model.CombinedItem
 import com.example.inventorydashboard.domain.model.InventoryItem
 
 fun ItemDto.toInventoryItem(): InventoryItem? {
@@ -29,5 +31,25 @@ fun BalanceDto.toBalanceItem(): BalanceItem? {
         itemCode = id,
         stockCode = stockCode,
         quantity = quantity
+    )
+}
+
+fun CombinedItem.toCombineItemDto(): CombinedItemDto? {
+    return CombinedItemDto(
+        itemNo = itemNo,
+        name = name,
+        category = category,
+        quantity = quantity,
+        itemK = itemK
+    )
+}
+
+fun CombinedItemDto.toCombineItem(): CombinedItem? {
+    return CombinedItem(
+        itemNo = itemNo,
+        name = name,
+        category = category,
+        quantity = quantity,
+        itemK = itemK
     )
 }

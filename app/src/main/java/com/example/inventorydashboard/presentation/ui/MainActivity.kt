@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
             binding.etSearch.setText("")
             binding.spCategory.setSelection(0)
             pendingScrollToTop = true
-            viewModel.refresh()
+            viewModel.refresh(isPulled = true)
         }
 
         binding.etSearch.addTextChangedListener { text ->
