@@ -21,17 +21,6 @@
         android:imeOptions="actionSearch"
         android:layout_marginBottom="8dp" />
 
-    <ImageButton
-        android:id="@+id/btnToggleView"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_gravity="end"
-        android:src="@android:drawable/ic_menu_sort_by_size"
-        android:contentDescription="Toggle View"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:padding="6dp"
-        android:layout_marginBottom="8dp" />
-
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
