@@ -1,6 +1,7 @@
 package com.example.inventorydashboard.presentation.ui
 
 import android.os.Bundle
+import android.view.View
 import android.widget.ArrayAdapter
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.inventorydashboard.databinding.ActivityMainBinding
 import com.example.inventorydashboard.presentation.adapter.InventoryAdapter
 import com.example.inventorydashboard.presentation.extentions.onItemSelected
+import com.example.inventorydashboard.presentation.extentions.showErrorSnack
 import com.example.inventorydashboard.presentation.viewModel.InventoryViewModel
 import com.example.inventorydashboard.utils.Result
 import dagger.hilt.android.AndroidEntryPoint
@@ -93,15 +95,19 @@ class MainActivity : AppCompatActivity() {
                                 }
                             }
                             binding.swipeRefresh.isRefreshing = false
+                            binding.emptyState.visibility = if (result.data.isEmpty()) View.VISIBLE else View.GONE
                         }
 
                         is Result.Error -> {
+                            binding.progress.visibility = View.GONE
                             binding.swipeRefresh.isRefreshing = false
-                            adapter.submitList(emptyList()) {
-                                if (pendingScrollToTop) {
-                                    scrollToTop()
-                                    pendingScrollToTop = false
-                                }
+                            binding.root.showErrorSnack(
+                                result.message
+                            ) {
+                                binding.etSearch.setText("")
+                                binding.spCategory.setSelection(0)
+                                pendingScrollToTop = true
+                                viewModel.refresh(isPulled = true)
                             }
                         }
                     }

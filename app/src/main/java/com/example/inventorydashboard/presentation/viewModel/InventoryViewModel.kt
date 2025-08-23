@@ -10,10 +10,8 @@ import com.example.inventorydashboard.domain.usecase.GetCombinedUseCase
 import com.example.inventorydashboard.domain.usecase.GetInventoryItemsUseCase
 import com.example.inventorydashboard.domain.usecase.GetLastSyncFormattedUseCase
 import com.example.inventorydashboard.domain.usecase.InsertCombineUseCase
-import com.example.inventorydashboard.domain.usecase.SaveLastSyncUseCase
 import com.example.inventorydashboard.utils.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -27,7 +25,6 @@ class InventoryViewModel @Inject constructor(
     private val insertCombineUseCase: InsertCombineUseCase,
     private val getCombinedUseCase: GetCombinedUseCase,
     private val getLastSyncFormattedUseCase: GetLastSyncFormattedUseCase,
-    private val saveLastSyncUseCase: SaveLastSyncUseCase
 ) : ViewModel() {
 
     private val _items = MutableStateFlow<Result<List<CombinedItem>>>(Result.Loading)
@@ -58,11 +55,8 @@ class InventoryViewModel @Inject constructor(
                 if (cachedItem.isNotEmpty() && !isPulled) {
                     allItems = cachedItem
                 } else {
-                    val itemsDef = async { getItemsUseCase(cono, strno) }
-                    val balancesDef = async { getBalancesUseCase(cono, strno) }
-
-                    val items = itemsDef.await()
-                    val balances = balancesDef.await()
+                    val items = getItemsUseCase(cono, strno)
+                    val balances = getBalancesUseCase(cono, strno)
 
                     allItems = combine(items, balances).sortedBy { it.name }
                     insertCombineUseCase(combine(items, balances).sortedBy { it.name })
@@ -72,23 +66,23 @@ class InventoryViewModel @Inject constructor(
                     .distinct()
                     .sorted()
 
-                _categoryOptions.value = listOf("الكل") + category
+                _categoryOptions.value = listOf("All") + category
                 currentSearch = ""
                 currentCategory = ""
 
-                saveLastSyncUseCase()
                 val text = getLastSyncFormattedUseCase()
                 _lastSyncText.value = text
 
                 applyFilters()
             } catch (e: Exception) {
+                e.printStackTrace()
                 _items.value = Result.Error(e.message ?: "Unexpected error")
             }
         }
     }
 
     fun setCategory(categoryOrAll: String) {
-        currentCategory = if (categoryOrAll == "الكل") "" else categoryOrAll
+        currentCategory = if (categoryOrAll == "All") "" else categoryOrAll
         applyFilters()
     }
 

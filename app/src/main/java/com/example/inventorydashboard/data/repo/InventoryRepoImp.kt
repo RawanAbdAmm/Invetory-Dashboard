@@ -30,6 +30,7 @@ class InventoryRepoImp @Inject constructor(
 
     override suspend fun insertCombine(list: List<CombinedItem>) {
         localData.insertItems(list.mapNotNull { it.toCombineItemDto() })
+        saveLastSync()
     }
 
     override suspend fun getCombine(): List<CombinedItem> {

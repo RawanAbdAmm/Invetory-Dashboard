@@ -6,4 +6,6 @@
     <string name="last_sync_time_label">Last sync time :</string>
     <string name="search_label">Search by name</string>
     <string name="no_items_found_label">No Items Found</string>
+    <string name="retry">Retry</string>
+    <string name="unknown_Error">Unknown Error</string>
 </resources>
