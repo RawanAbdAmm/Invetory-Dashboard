@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Inventory Dashboard</string>
+    <string name="name_label">Name :</string>
+    <string name="category_label">Category :</string>
+    <string name="quantity_label">Quantity:</string>
+    <string name="last_sync_time_label">Last sync time :</string>
+    <string name="search_label">Search by name</string>
+    <string name="no_items_found_label">No Items Found</string>
 </resources>
