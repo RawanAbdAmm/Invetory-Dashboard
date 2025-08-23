@@ -61,14 +61,6 @@ presentation/
 
 ---
 
-## 📦 APK (Optional)
-Place your release APK at:
-```
-app/release/app-release.apk
-```
-
----
-
 ## 📝 Notes
 - Last sync timestamp is updated after a successful refresh and displayed in the UI.
 - Network failures are handled with a retryable Snackbar/Toast; the app remains stable offline.
