@@ -1,6 +1,7 @@
 package com.example.inventorydashboard.data.mapper
 
 import com.example.inventorydashboard.data.local.dto.CombinedItemDto
+import com.example.inventorydashboard.data.local.dto.SyncInfoEntity
 import com.example.inventorydashboard.data.remote.dto.BalanceDto
 import com.example.inventorydashboard.data.remote.dto.ItemDto
 import com.example.inventorydashboard.domain.model.BalanceItem
@@ -52,4 +53,8 @@ fun CombinedItemDto.toCombineItem(): CombinedItem? {
         quantity = quantity,
         itemK = itemK
     )
+
 }
+
+fun Long.toSyncInfoEntity(): SyncInfoEntity = SyncInfoEntity(lastSync = this)
+fun SyncInfoEntity.toLastSyncMillis(): Long = lastSync

@@ -5,11 +5,16 @@ import com.example.inventorydashboard.data.mapper.toBalanceItem
 import com.example.inventorydashboard.data.mapper.toCombineItem
 import com.example.inventorydashboard.data.mapper.toCombineItemDto
 import com.example.inventorydashboard.data.mapper.toInventoryItem
+import com.example.inventorydashboard.data.mapper.toLastSyncMillis
+import com.example.inventorydashboard.data.mapper.toSyncInfoEntity
 import com.example.inventorydashboard.data.remote.ApiService
 import com.example.inventorydashboard.domain.model.BalanceItem
 import com.example.inventorydashboard.domain.model.CombinedItem
 import com.example.inventorydashboard.domain.model.InventoryItem
 import com.example.inventorydashboard.domain.repo.InventoryRepository
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 class InventoryRepoImp @Inject constructor(
@@ -31,4 +36,14 @@ class InventoryRepoImp @Inject constructor(
         return localData.getAllItems().mapNotNull { it.toCombineItem() }
     }
 
+    override suspend fun saveLastSync() {
+        localData.saveLastSync(System.currentTimeMillis().toSyncInfoEntity())
+    }
+
+    override suspend fun getLastSyncFormatted(): String {
+        val lastSync = localData.getLastSync()?.toLastSyncMillis() ?: 0L
+        return if (lastSync == 0L) "-"
+        else SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault()).format(Date(lastSync))
+    }
 }
+

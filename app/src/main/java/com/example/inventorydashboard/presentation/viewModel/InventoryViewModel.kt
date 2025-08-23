@@ -8,7 +8,9 @@ import com.example.inventorydashboard.domain.model.InventoryItem
 import com.example.inventorydashboard.domain.usecase.GetBalancesUseCase
 import com.example.inventorydashboard.domain.usecase.GetCombinedUseCase
 import com.example.inventorydashboard.domain.usecase.GetInventoryItemsUseCase
+import com.example.inventorydashboard.domain.usecase.GetLastSyncFormattedUseCase
 import com.example.inventorydashboard.domain.usecase.InsertCombineUseCase
+import com.example.inventorydashboard.domain.usecase.SaveLastSyncUseCase
 import com.example.inventorydashboard.utils.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
@@ -23,7 +25,9 @@ class InventoryViewModel @Inject constructor(
     private val getItemsUseCase: GetInventoryItemsUseCase,
     private val getBalancesUseCase: GetBalancesUseCase,
     private val insertCombineUseCase: InsertCombineUseCase,
-    private val getCombinedUseCase: GetCombinedUseCase
+    private val getCombinedUseCase: GetCombinedUseCase,
+    private val getLastSyncFormattedUseCase: GetLastSyncFormattedUseCase,
+    private val saveLastSyncUseCase: SaveLastSyncUseCase
 ) : ViewModel() {
 
     private val _items = MutableStateFlow<Result<List<CombinedItem>>>(Result.Loading)
@@ -37,20 +41,23 @@ class InventoryViewModel @Inject constructor(
     private var currentSearch: String = ""
     private var currentCategory: String = ""
 
+    private val _lastSyncText = MutableStateFlow("-")
+    val lastSyncText: StateFlow<String> = _lastSyncText
+
+
     init {
         refresh()
     }
 
-    fun refresh(cono: Int = 290, strno: Int = 1,isPulled: Boolean=false) {
+    fun refresh(cono: Int = 290, strno: Int = 1, isPulled: Boolean = false) {
         viewModelScope.launch {
             _items.value = Result.Loading
             try {
                 val cachedItem = getCombinedUseCase()
 
-                if (cachedItem.isNotEmpty()&& !isPulled){
-                    allItems=cachedItem
-                }
-                else {
+                if (cachedItem.isNotEmpty() && !isPulled) {
+                    allItems = cachedItem
+                } else {
                     val itemsDef = async { getItemsUseCase(cono, strno) }
                     val balancesDef = async { getBalancesUseCase(cono, strno) }
 
@@ -68,6 +75,10 @@ class InventoryViewModel @Inject constructor(
                 _categoryOptions.value = listOf("الكل") + category
                 currentSearch = ""
                 currentCategory = ""
+
+                saveLastSyncUseCase()
+                val text = getLastSyncFormattedUseCase()
+                _lastSyncText.value = text
 
                 applyFilters()
             } catch (e: Exception) {

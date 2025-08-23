@@ -36,8 +36,8 @@
                     android:layout_marginEnd="4dp"
                     android:text="@string/name_label"
                     android:textColor="?attr/colorOnSurfaceVariant"
-                    android:textStyle="bold"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvName"
@@ -51,8 +51,8 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="6dp">
+                android:layout_marginTop="6dp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -60,8 +60,8 @@
                     android:layout_marginEnd="4dp"
                     android:text="@string/category_label"
                     android:textColor="?attr/colorOnSurfaceVariant"
-                    android:textStyle="bold"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvCategory"
@@ -71,38 +71,13 @@
                     android:textStyle="normal"
                     tools:text="دخان" />
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="6dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="4dp"
-                    android:text="@string/last_sync_time_label"
-                    android:textColor="?attr/colorOnSurfaceVariant"
-                    android:textStyle="bold"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/tvLastSync"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textStyle="normal"
-                    android:textColor="?attr/colorOnSurface"
-                    tools:text="2025-08-23 11:00" />
-            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -110,8 +85,8 @@
                 android:layout_marginEnd="4dp"
                 android:text="@string/quantity_label"
                 android:textColor="?attr/colorOnSurfaceVariant"
-                android:textStyle="bold"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvQty"

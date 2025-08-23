@@ -45,6 +45,13 @@ class MainActivity : AppCompatActivity() {
             pendingScrollToTop = true
             viewModel.refresh(isPulled = true)
         }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.lastSyncText.collect { text ->
+                    binding.tvLastSync.text = text
+                }
+            }
+        }
 
         binding.etSearch.addTextChangedListener { text ->
             val value = text?.toString().orEmpty()

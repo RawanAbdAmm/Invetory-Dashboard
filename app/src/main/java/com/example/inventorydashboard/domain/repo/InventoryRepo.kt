@@ -11,4 +11,7 @@ interface InventoryRepository {
     suspend fun insertCombine(list: List<CombinedItem>)
     suspend fun getCombine(): List<CombinedItem>
 
+    suspend fun saveLastSync()
+    suspend fun getLastSyncFormatted(): String
+
 }
